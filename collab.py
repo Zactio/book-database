@@ -68,43 +68,7 @@ def api_filter():
 
     return jsonify(results)
     
-@app.route('/api/v1/resources/books', methods=['PUT'])
-def update_base():
-    query_parameters = request.args
-
-    id = query_parameters.get('id')
-    published = query_parameters.get('published')
-    author = query_parameters.get('author')
-
-    query = "SELECT * FROM books WHERE"
-    to_filter = []
-
-    # if id:
-    #     query += ' id=? AND'
-    #     to_filter.append(id)
-    if published:
-        query += ' published=? AND'
-        to_filter.append(published)
-    if author:
-        query += ' author=? AND'
-        to_filter.append(author)
-    if not (id or published or author):
-        return page_not_found(404)
-
-    query = query[:-4] + ';'
-    conn = sqlite3.connect('books.db')
-    results = []
-    results_list = []
-
-    cursor = conn.execute("SELECT ID, TITLE, AUTHOR, PUBLISHED, FIRST_SENTENCE from books")
-    for row in cursor:
-        if str(published) == str(row[3]) and str(author) == str(row[2]):
-            results.append(row[4])
-            results_list.append(request.json.get('title'))
-            conn.execute("UPDATE books set TITLE =?  where (PUBLISHED = ? and AUTHOR = ?)", (request.json.get('title'), row[3], row[2]))
-            conn.commit()
-
-    return jsonify(results_list)
+#Add it here
 
 
 if __name__ == "__main__":
